@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 # RandomForestClassifier = Random Forest machine learning model for classification
 from sklearn.ensemble import RandomForestClassifier
 
-import matplotlib as plt
+
 
 print("=" * 70)
 print("TRAINING RandomForest MODEL - Heart Disease Prediction")
