@@ -1,4 +1,4 @@
-# Train Logistic Regression model to predict heart disease
+# Train Random Forest model to predict heart disease
 
 # pandas = library for reading CSV files and working with tables
 import pandas as pd
@@ -54,6 +54,7 @@ print(f"Testing set: {len(X_test)} rows")
 
 # 4. Create and train RandomForest model
 model = LogisticRegression(
+    max_iter=300,          # allows for 300 iterations as the default gave sub optimal results
     random_state=123       # same results every time we run
 )
 
