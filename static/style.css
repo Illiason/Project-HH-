@@ -1,0 +1,250 @@
+/* Universal reset: remove default margins/paddings and use border-box box-sizing */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+/* Body styles – sets font, background gradient, and minimum height */
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;  /* Modern sans-serif stack */
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 50%, #ede9fe 100%);  /* Soft blue-to-purple diagonal gradient */
+    min-height: 100vh;        /* Ensure body fills at least the full viewport height */
+    padding: 40px 20px;       /* Space around content on top/bottom and sides */
+}
+
+/* Main content container – centers and limits width for readability */
+.container { 
+    max-width: 680px;         /* Restrict width on large screens for comfortable reading */
+    margin: 0 auto;           /* Center horizontally */
+}
+
+/* Page header styles */
+.header { 
+    text-align: center;       /* Center all header content */
+    margin-bottom: 25px;      /* Space below header before model tabs */
+}
+.header .icon { 
+    font-size: 42px;          /* Large heart emoji */
+    margin-bottom: 8px;       /* Space between icon and heading */
+}
+.header h1 { 
+    font-size: 28px; 
+    font-weight: 700;         /* Bold */
+    color: #1e293b;           /* Dark slate */
+    letter-spacing: -0.5px;   /* Slightly tighter letter spacing for modern look */
+}
+.header p { 
+    color: #64748b;           /* Muted slate */
+    font-size: 14px; 
+    margin-top: 4px;          /* Small gap above subtitle */
+}
+
+/* Container for the model selection tabs */
+.model-tabs {
+    display: flex;            /* Arrange children (buttons) in a row */
+    gap: 8px;                 /* Space between tabs */
+    margin-bottom: 20px;      /* Space below tabs before main card */
+    background: rgba(255,255,255,0.6);  /* Semi-transparent white background */
+    padding: 6px;             /* Inner spacing around the tab buttons */
+    border-radius: 12px;      /* Rounded outer container */
+    border: 1px solid rgba(255,255,255,0.8);  /* Subtle white border for glass effect */
+}
+
+/* Individual tab button */
+.model-tab {
+    flex: 1;                  /* Each tab takes equal width */
+    padding: 10px 8px;        /* Vertical and horizontal padding */
+    border: none;             /* Remove default button border */
+    border-radius: 8px;       /* Rounded corners for the button itself */
+    cursor: pointer;          /* Show hand cursor on hover */
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;         /* Medium weight */
+    background: transparent;  /* Inactive tabs have no background */
+    color: #64748b;           /* Muted text color */
+    transition: all 0.2s;     /* Smooth transition for hover/active states */
+    text-align: center;
+}
+/* Hover effect for inactive tabs */
+.model-tab:hover { 
+    background: rgba(255,255,255,0.7);  /* Slightly more opaque white */
+    color: #1e293b;                     /* Darker text */
+}
+/* Active tab (currently selected model) */
+.model-tab.active {
+    background: white;        /* Solid white background for active tab */
+    color: #4f46e5;           /* Indigo text */
+    font-weight: 600;         /* Bolder */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);  /* Subtle shadow lifts active tab */
+}
+/* Accuracy badge inside tab */
+.model-tab .acc-badge {
+    display: block;           /* Place on its own line below model name */
+    font-size: 11px;
+    font-weight: 400;         /* Normal weight */
+    color: #94a3b8;           /* Lighter slate */
+    margin-top: 2px;
+}
+/* Accuracy badge color when tab is active */
+.model-tab.active .acc-badge { 
+    color: #6366f1;           /* Slightly lighter indigo */
+}
+
+/* Main prediction card (glassmorphism effect) */
+.card {
+    background: rgba(255,255,255,0.85);  /* Mostly opaque white */
+    backdrop-filter: blur(10px);         /* Blur background behind the card (modern glass effect) */
+    border-radius: 16px;                 /* Rounded corners */
+    padding: 30px;                       /* Inner spacing */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);  /* Soft, diffused shadow */
+    border: 1px solid rgba(255,255,255,0.8);  /* Subtle border for definition */
+}
+
+/* Indicator showing which model is currently selected */
+.selected-model {
+    text-align: center;
+    font-size: 13px;
+    color: #6366f1;           /* Indigo */
+    font-weight: 600;         /* Semi-bold */
+    margin-bottom: 20px;      /* Space below before form fields */
+    padding: 8px;
+    background: #eef2ff;      /* Very light indigo background */
+    border-radius: 8px;
+}
+
+/* Two-column grid for form fields */
+.form-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr;  /* Two equal columns */
+    gap: 15px;                       /* Space between grid items (both rows and columns) */
+    margin-bottom: 24px;             /* Space below grid before submit button */
+}
+
+/* Individual field wrapper */
+.field label { 
+    display: block;           /* Label on its own line */
+    font-size: 12px; 
+    font-weight: 600;         /* Bold */
+    color: #475569;           /* Slate */
+    margin-bottom: 2px; 
+    text-transform: uppercase; /* Uppercase labels for compact look */
+    letter-spacing: 0.5px;    /* Slight letter spacing */
+}
+/* Helper description text under label */
+.field .desc { 
+    font-size: 11px; 
+    color: #94a3b8;           /* Light muted slate */
+    margin-bottom: 6px; 
+}
+/* Styles for select dropdowns and text/number inputs */
+.field select, .field input {
+    width: 100%;              /* Fill the parent container */
+    padding: 10px 12px;       /* Comfortable touch target */
+    border: 2px solid #e2e8f0; /* Light gray border */
+    border-radius: 10px;      /* Rounded corners */
+    background: #f8fafc;      /* Very light gray-blue */
+    color: #1e293b;           /* Dark text */
+    font-size: 15px; 
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;     /* Smooth transition for focus state */
+}
+/* Focus state – when user clicks into field */
+.field select:focus, .field input:focus {
+    outline: none;            /* Remove default browser outline */
+    border-color: #6366f1;    /* Indigo border */
+    background: #fff;         /* Solid white background */
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);  /* Soft indigo glow */
+}
+
+/* Primary action button (Predict) */
+.btn {
+    width: 100%;              /* Full width of container */
+    padding: 14px;            /* Generous padding for large click area */
+    background: linear-gradient(135deg, #4f46e5, #6366f1);  /* Indigo gradient */
+    color: white; 
+    border: none; 
+    border-radius: 12px;      /* Rounded pill shape */
+    font-size: 16px; 
+    font-weight: 600;         /* Semi-bold */
+    font-family: 'Inter', sans-serif;
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 0 4px 12px rgba(79,70,229,0.3);  /* Colored shadow for depth */
+}
+/* Hover effect – slight lift */
+.btn:hover { 
+    transform: translateY(-1px);   /* Move up 1px */
+    box-shadow: 0 6px 16px rgba(79,70,229,0.4);  /* Larger shadow */
+}
+/* Active (click) effect – return to original position */
+.btn:active { 
+    transform: translateY(0); 
+}
+
+/* Result box (appears after prediction) */
+.result {
+    margin-top: 24px;         /* Space above result from form/button */
+    padding: 24px; 
+    border-radius: 14px; 
+    text-align: center; 
+    animation: fadeIn 0.4s ease;  /* Smooth fade-in when result appears */
+}
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px);  /* Start slightly lower and transparent */
+    }
+    to   { 
+        opacity: 1; 
+        transform: translateY(0);     /* End at normal position and fully opaque */
+    }
+}
+/* Model name inside result box */
+.result .model-used { 
+    font-size: 12px; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    margin-bottom: 4px; 
+    opacity: 0.7;             /* Slightly faded */
+}
+/* Main prediction heading */
+.result h2 { 
+    font-size: 22px; 
+    font-weight: 700; 
+    margin-bottom: 6px; 
+}
+/* Probability percentage (large number) */
+.result .prob { 
+    font-size: 44px; 
+    font-weight: 700; 
+    letter-spacing: -1px;     /* Tighten large number for modern look */
+}
+
+/* Color theme for "No Disease" result (green tones) */
+.no-disease { 
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);  /* Soft green gradient */
+    border: 2px solid #6ee7b7;  /* Emerald border */
+}
+.no-disease .model-used { color: #059669; }  /* Emerald */
+.no-disease h2 { color: #065f46; }           /* Dark green */
+.no-disease .prob { color: #059669; }
+
+/* Color theme for "Has Disease" result (red tones) */
+.has-disease { 
+    background: linear-gradient(135deg, #fef2f2, #fecaca);  /* Soft red gradient */
+    border: 2px solid #fca5a5;  /* Light red border */
+}
+.has-disease .model-used { color: #dc2626; }  /* Red */
+.has-disease h2 { color: #991b1b; }           /* Dark red */
+.has-disease .prob { color: #dc2626; }
+
+/* Footer text */
+.footer { 
+    text-align: center; 
+    margin-top: 20px; 
+    color: #94a3b8;           /* Muted slate */
+    font-size: 12px; 
+}
