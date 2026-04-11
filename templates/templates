@@ -1,0 +1,163 @@
+<!-- Start of HTML document -->
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Page title shown in browser tab -->
+    <title>Heart Disease Prediction</title>
+    <!-- Import Google Font 'Inter' for modern, clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Internal CSS styles for the entire page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Main container div to constrain width and center content -->
+    <div class="container">
+        <!-- Page header with heart icon and title -->
+        <div class="header">
+            <!-- HTML entity for anatomical heart emoji 🫀 (Unicode U+1F496) -->
+            <div class="icon">&#x1FAC0;</div>
+            <!-- Main heading of the page -->
+            <h1>Heart Disease Prediction</h1>
+            <!-- Subtitle / instruction for the user -->
+            <p>Select a model and enter patient data to predict</p>
+        </div>
+
+        <!-- Model selector tabs (separate form that only submits model selection) -->
+        <!-- method="POST" sends data securely (not in URL) -->
+        <form method="POST">
+            <!-- Flex container for tab buttons (styled as horizontal tabs) -->
+            <div class="model-tabs">
+                <!-- Jinja2 for-loop: iterate over all models from backend dictionary -->
+                <!-- 'models' is a dictionary passed from Flask: {'xgboost': {...}, 'rf': {...}, 'logistic': {...}} -->
+                {% for key, info in models.items() %}
+                <!-- Each tab is a submit button; clicking changes the selected model without predicting -->
+                <!-- name="select_model" tells Flask which action was performed -->
+                <!-- value="{{ key }}" sends the model key ('xgboost', 'rf', or 'logistic') -->
+                <!-- Conditional class: 'active' is added if this model is currently selected -->
+                <button type="submit" name="select_model" value="{{ key }}"
+                        class="model-tab {{ 'active' if selected_model == key }}">
+                    <!-- Display the human-readable model name (e.g., "Random Forest") -->
+                    {{ info.name }}
+                    <!-- Display accuracy badge below model name -->
+                    <!-- "%.1f"|format(...) rounds accuracy*100 to one decimal place (e.g., 85.3%) -->
+                    <span class="acc-badge">Accuracy: {{ "%.1f"|format(info.acc*100) }}%</span>
+                </button>
+                <!-- End of loop over models -->
+                {% endfor %}
+            </div>
+        </form>
+
+        <!-- Main prediction card (white panel with glassmorphism effect) -->
+        <div class="card">
+            <!-- Display currently active model name and its test accuracy -->
+            <div class="selected-model">
+                <!-- &mdash; is an em-dash (—) for visual separation -->
+                Using: {{ models[selected_model].name }} &mdash; Test Accuracy: {{ "%.1f"|format(models[selected_model].acc*100) }}%
+            </div>
+
+            <!-- Patient data input form (submits to same route '/' via POST) -->
+            <form method="POST">
+                <!-- Hidden input to persist the selected model key across form submissions -->
+                <!-- When the user clicks "Predict", this ensures the correct model is used -->
+                <input type="hidden" name="selected_model" value="{{ selected_model }}">
+
+                <!-- Two-column grid for form fields (using CSS Grid) -->
+                <div class="form-grid">
+                    <!-- Age field -->
+                    <div class="field">
+                        <label>Age</label>
+                        <!-- Helper description for the user -->
+                        <div class="desc">Patient age (28-77)</div>
+                        <!-- Numeric input with min/max validation -->
+                        <!-- value="{{ values.age }}" pre-fills the field with previous input (or default 50) -->
+                        <input type="number" name="age" min="20" max="100" value="{{ values.age }}" required>
+                    </div>
+                    <!-- Sex field (dropdown) -->
+                    <div class="field">
+                        <label>Sex</label>
+                        <div class="desc">Biological sex</div>
+                        <!-- Dropdown select for sex -->
+                        <select name="sex">
+                            <!-- Jinja conditional: 'selected' attribute added if values.sex == '1' -->
+                            <option value="1" {{ 'selected' if values.sex == '1' }}>Male</option>
+                            <option value="0" {{ 'selected' if values.sex == '0' }}>Female</option>
+                        </select>
+                    </div>
+                    <!-- Chest pain type field (dropdown) -->
+                    <div class="field">
+                        <label>Chest Pain Type</label>
+                        <div class="desc">Type of chest pain experienced</div>
+                        <select name="cp">
+                            <!-- Values 1-4 correspond to clinical categories -->
+                            <option value="1" {{ 'selected' if values.cp == '1' }}>1 - Typical Angina</option>
+                            <option value="2" {{ 'selected' if values.cp == '2' }}>2 - Atypical Angina</option>
+                            <option value="3" {{ 'selected' if values.cp == '3' }}>3 - Non-Anginal Pain</option>
+                            <option value="4" {{ 'selected' if values.cp == '4' }}>4 - Asymptomatic</option>
+                        </select>
+                    </div>
+                    <!-- Maximum heart rate field -->
+                    <div class="field">
+                        <label>Max Heart Rate</label>
+                        <div class="desc">During exercise (60-220 bpm)</div>
+                        <input type="number" name="thalach" min="60" max="220" value="{{ values.thalach }}" required>
+                    </div>
+                    <!-- ST depression (oldpeak) field -->
+                    <div class="field">
+                        <label>ST Depression</label>
+                        <div class="desc">Oldpeak value (0.0-6.0)</div>
+                        <!-- step="0.1" allows decimal values -->
+                        <input type="number" name="oldpeak" min="-3" max="7" step="0.1" value="{{ values.oldpeak }}" required>
+                    </div>
+                    <!-- Exercise induced angina field (dropdown) -->
+                    <div class="field">
+                        <label>Exercise Angina</label>
+                        <div class="desc">Chest pain during exercise?</div>
+                        <select name="exang">
+                            <option value="0" {{ 'selected' if values.exang == '0' }}>No</option>
+                            <option value="1" {{ 'selected' if values.exang == '1' }}>Yes</option>
+                        </select>
+                    </div>
+                    <!-- Cholesterol field -->
+                    <div class="field">
+                        <label>Cholesterol</label>
+                        <div class="desc">Serum cholesterol (100-600 mg/dl)</div>
+                        <input type="number" name="chol" min="50" max="700" value="{{ values.chol }}" required>
+                    </div>
+                    <!-- ST slope field (dropdown) -->
+                    <div class="field">
+                        <label>ST Slope</label>
+                        <div class="desc">ECG slope during peak exercise</div>
+                        <select name="slope">
+                            <option value="1" {{ 'selected' if values.slope == '1' }}>1 - Upsloping</option>
+                            <option value="2" {{ 'selected' if values.slope == '2' }}>2 - Flat</option>
+                            <option value="3" {{ 'selected' if values.slope == '3' }}>3 - Downsloping</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Submit button for prediction -->
+                <!-- name="action" value="predict" tells Flask that this is a prediction request (not a model switch) -->
+                <button class="btn" type="submit" name="action" value="predict">Predict Heart Disease</button>
+            </form>
+
+            <!-- Conditional block: only show result section if a prediction has been made -->
+            <!-- Jinja2 syntax: 'result is not none' checks if the variable exists and is not None -->
+            {% if result is not none %}
+            <!-- Apply CSS class based on prediction outcome: 'has-disease' or 'no-disease' -->
+            <div class="result {{ 'has-disease' if result == 1 else 'no-disease' }}">
+                <!-- Show which model produced this prediction -->
+                <div class="model-used">{{ models[selected_model].name }}</div>
+                <!-- Display prediction text (ternary Jinja conditional) -->
+                <h2>{{ 'Has Heart Disease' if result == 1 else 'No Heart Disease' }}</h2>
+                <!-- Display confidence probability as percentage (e.g., "87.3%") -->
+                <div class="prob">{{ probability }}%</div>
+            </div>
+            <!-- End of conditional block -->
+            {% endif %}
+        </div>
+
+        <!-- Footer with dataset information -->
+        <!-- &middot; is an HTML entity for a middle dot (·) used as a separator -->
+        <div class="footer">Trained on 918 patients &middot; 8 features &middot; 3 models available</div>
+    </div>
+</body>
+</html>
