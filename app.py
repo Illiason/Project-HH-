@@ -3,40 +3,45 @@
 # Open: http://localhost:5000
 # HTML template is in: templates/index.html
 
-import pandas as pd
+
+# os = library for interacting with the operating system
+# We use it for tasks like navigating file directories, managing file paths, and environment variables
+import os
+
+# numpy = library for working with numbers, arrays, and math operations
+# We use it for numerical calculations
+# "as np" = shortcut so we type np instead of numpy
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from xgboost import XGBClassifier
+
+# joblib = library for efficiently saving and loading large data objects and machine learning models
+# We use it to persist Python objects to disk
+import joblib
+
+
 from flask import Flask, request, render_template
 
-# Train all 3 models on startup
-df = pd.read_csv('main_dataset.csv')
-X = df.drop('target', axis=1)
-y = df['target']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=333)
 
-print("Training all 3 models...")
+# Load pre-trained models from disk (no retraining on startup)
 
-xgb_model = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42, eval_metric='logloss')
-xgb_model.fit(X_train, y_train)
+MODELS_DIR = 'models'
 
-rf_model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=123)
-rf_model.fit(X_train, y_train)
+print("Loading models from disk...")
 
-lgr_model = LogisticRegression(max_iter=1000, random_state=42)
-lgr_model.fit(X_train, y_train)
+xgb_model = joblib.load(os.path.join(MODELS_DIR, 'xgb_model.joblib'))
+rf_model   = joblib.load(os.path.join(MODELS_DIR, 'rf_model.joblib'))
+lgr_model  = joblib.load(os.path.join(MODELS_DIR, 'lgr_model.joblib'))
+accuracies = joblib.load(os.path.join(MODELS_DIR, 'accuracies.joblib'))
 
 MODELS = {
-    'xgboost':  {'model': xgb_model,  'name': 'XGBoost',            'acc': xgb_model.score(X_test, y_test)},
-    'rf':       {'model': rf_model,   'name': 'Random Forest',       'acc': rf_model.score(X_test, y_test)},
-    'logistic': {'model': lgr_model,  'name': 'Logistic Regression', 'acc': lgr_model.score(X_test, y_test)},
+    'xgboost':  {'model': xgb_model,  'name': 'XGBoost',            'acc': accuracies['xgboost']},
+    'rf':       {'model': rf_model,   'name': 'Random Forest',       'acc': accuracies['rf']},
+    'logistic': {'model': lgr_model,  'name': 'Logistic Regression', 'acc': accuracies['logistic']},
 }
 
 for key, info in MODELS.items():
     print(f"  {info['name']}: {info['acc']*100:.1f}%")
 print("All models ready!")
+
 
 app = Flask(__name__)
 
