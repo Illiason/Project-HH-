@@ -3,8 +3,6 @@
 A machine learning project that predicts whether a patient has heart disease from
 8 clinical measurements, with a Flask web app for interactive predictions.
 
-## Overvie<img width="1085" height="817" alt="image" src="https://github.com/user-attachments/assets/7fd0340b-e8f4-4cbb-afae-cb5e8e5c5579" />
-
 
 Three classifiers are trained on the same dataset and compared side by side:
 
