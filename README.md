@@ -3,7 +3,8 @@
 A machine learning project that predicts whether a patient has heart disease from
 8 clinical measurements, with a Flask web app for interactive predictions.
 
-## Overview
+## Overvie<img width="1085" height="817" alt="image" src="https://github.com/user-attachments/assets/7fd0340b-e8f4-4cbb-afae-cb5e8e5c5579" />
+
 
 Three classifiers are trained on the same dataset and compared side by side:
 
@@ -22,19 +23,19 @@ cross-validation, ROC/AUC, and precision-recall curves (see
 `main_dataset.csv` holds 918 patient records with 8 features and a binary
 target (`0` = no disease, `1` = has disease):
 
-- `age` — patient age
-- `sex` — 1 = male, 0 = female
-- `cp` — chest pain type
-- `chol` — serum cholesterol
-- `thalach` — maximum heart rate achieved
-- `exang` — exercise-induced angina (1 = yes, 0 = no)
-- `oldpeak` — ST depression induced by exercise
-- `slope` — slope of the peak exercise ST segment
+- `age` - patient age
+- `sex` - 1 = male, 0 = female
+- `cp` - chest pain type
+- `chol` - serum cholesterol
+- `thalach` - maximum heart rate achieved
+- `exang` - exercise-induced angina (1 = yes, 0 = no)
+- `oldpeak` - ST depression induced by exercise
+- `slope` - slope of the peak exercise ST segment
 
 ## Project structure
 
 ```
-app.py                        # Flask web app — model selector + prediction UI
+app.py                        # Flask web app - model selector + prediction UI
 templates/index.html          # Prediction form and results page
 static/style.css              # Page styling
 
@@ -71,4 +72,4 @@ python train_randomforest.py
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
